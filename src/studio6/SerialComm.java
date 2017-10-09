@@ -27,10 +27,68 @@ public class SerialComm {
 	}
 		
 	// TODO: Add writeByte() method from Studio 5
+	public void writeByte(byte singleByte) {
+		try {
+			port.writeByte(singleByte);
+		} catch (SerialPortException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (debug) {
+			System.out.println(singleByte);
+		}
+		
+	}
 	
 	// TODO: Add available() method
+	public boolean available() {
+		int bytes = 0;
+		try {
+			bytes = port.getInputBufferBytesCount();
+		} catch (SerialPortException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if (bytes > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+		
+	
 	
 	// TODO: Add readByte() method	
+	public byte readByte() {
+		byte[] byteArray = null;
+		try {
+			byteArray = port.readBytes();
+		} catch (SerialPortException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (debug) {
+			System.out.println(String.format("%02x", byteArray[0]));
+		}
+		return byteArray[0];
+	}
 	
 	// TODO: Add a main() method
+	public static void main(String[] args) {
+		try {
+			SerialComm newByte = new SerialComm("COM3");
+			newByte.setDebug(true);
+			while (true) {
+				if (newByte.available()) {
+					byte Result = newByte.readByte();
+					System.out.println(Result);
+				}
+			}
+		} catch (SerialPortException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 }
